@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Email Scraper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      body {
+        padding-top: 50px;
+      }
+      .container {
+        max-width: 800px;
+      }
+      .form-control {
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5">Bulk Email Scraper</h1>
+      <p class="lead">Enter multiple domains (one per line) to scrape emails from the footer links.</p>
+      <form method="post" class="mt-3">
+        <div class="form-group">
+          <label for="domains">Enter domains:</label>
+          <textarea class="form-control" id="domains" name="domains" rows="10"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Scrape Emails</button>
+      </form>
+      {% if results %}
+        <h2 class="mt-5">Results:</h2>
+        <ul class="list-group">
+          {% for domain, emails in results.items() %}
+            <li class="list-group-item">
+              <strong>{{ domain }}:</strong>
+              <ul>
+                {% for email in emails %}
+                  <li>{{ email }}</li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+        <form action="/download" method="get">
+          <input type="hidden" name="results" value='{{ results | tojson | safe }}'>
+          <button type="submit" class="btn btn-success mt-3">Download CSV</button>
+        </form>
+      {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
